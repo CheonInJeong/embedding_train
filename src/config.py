@@ -7,6 +7,8 @@ ROOT_DIR = Path(__file__).resolve().parent.parent
 MODEL_NAME = "upskyy/bge-m3-korean"
 MODEL_PATH = str(ROOT_DIR / "models" / "bge-m3-korean")
 
+ANCHOR_FILE = str(ROOT_DIR / "data" / "address" / "STT주소_anchor.txt")
+
 TRAIN_FAIL = str(ROOT_DIR / "data" / "train" / "fail.txt")
 TRAIN_ANSWER = str(ROOT_DIR / "data" / "train" / "answer.txt")
 
@@ -18,8 +20,16 @@ TEST_ANSWER = str(ROOT_DIR / "data" / "test" / "answer.txt")
 
 OUTPUT_DIR = str(ROOT_DIR / "models" / "bge-m3-address")
 
-BATCH_SIZE = 32
+BATCH_SIZE = 16  # MPS(Apple GPU) 메모리 안정성을 위해 16으로 설정
 
 EPOCH = 3
 
 LEARNING_RATE = 2e-5
+
+LEARN_ADDRESS_FILE = str(ROOT_DIR / "data" / "address" / "학습주소.txt")
+
+DB_HOST = "localhost"
+DB_PORT = 5433
+DB_NAME = "address"
+DB_USER = "postgres"
+DB_PASSWORD = "postgres"

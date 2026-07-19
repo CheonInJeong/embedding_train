@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Trained model weights (large binaries, not committed)
+models/bge-m3-address/

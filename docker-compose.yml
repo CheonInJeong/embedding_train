@@ -1,0 +1,28 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: embedding_train_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: address
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+
+  torchserve:
+    build:
+      context: .
+      dockerfile: serve/Dockerfile
+    container_name: embedding_train_torchserve
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+
+volumes:
+  pgdata:

@@ -1,16 +1,29 @@
+import torch
 from sentence_transformers import (
     SentenceTransformer,
     SentenceTransformerTrainer,
     SentenceTransformerTrainingArguments,
+    losses,
 )
-import sentence_transformers.sentence_transformer.losses as losses
 
 from src import config
-from src.dataset import load_dataset
+from src.dataset import load_anchor_dataset
 
-model = SentenceTransformer(config.MODEL_NAME)
+# Apple M1/M2/M3 MPS GPU 우선, 없으면 CUDA, 없으면 CPU
+if torch.backends.mps.is_available():
+    device = "mps"
+elif torch.cuda.is_available():
+    device = "cuda"
+else:
+    device = "cpu"
 
-train_dataset = load_dataset(config.TRAIN_FAIL, config.TRAIN_ANSWER)
+print(f"Using device: {device}")
+
+model = SentenceTransformer(config.MODEL_NAME, device=device)
+
+train_dataset = load_anchor_dataset(config.ANCHOR_FILE)
+
+print(f"Train samples: {len(train_dataset)}")
 
 loss = losses.MultipleNegativesRankingLoss(model)
 
@@ -20,6 +33,8 @@ args = SentenceTransformerTrainingArguments(
     per_device_train_batch_size=config.BATCH_SIZE,
     warmup_steps=100,
     learning_rate=config.LEARNING_RATE,
+    fp16=False,   # MPS는 fp16 미지원
+    bf16=False,
 )
 
 trainer = SentenceTransformerTrainer(
@@ -32,3 +47,4 @@ trainer = SentenceTransformerTrainer(
 trainer.train()
 
 model.save(config.OUTPUT_DIR)
+print(f"Model saved to {config.OUTPUT_DIR}")

@@ -1,0 +1,15 @@
+CREATE EXTENSION IF NOT EXISTS vector;
+
+CREATE TABLE IF NOT EXISTS train_korean (
+    id BIGSERIAL PRIMARY KEY,
+    address TEXT NOT NULL,
+    embedding VECTOR(1024) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE IF NOT EXISTS train_address (
+    id BIGSERIAL PRIMARY KEY,
+    address TEXT NOT NULL,
+    embedding VECTOR(1024) NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
