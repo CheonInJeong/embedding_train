@@ -33,6 +33,11 @@ def apply_confusion(text: str) -> str:
             continue
 
         r = random.random()
+
+        # 30% 확률로만 오인식 적용
+        if random.random() > 0.3:
+            continue
+
         cumulative = 0.0
 
         for replacement, prob in candidates:

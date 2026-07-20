@@ -26,10 +26,10 @@ EPOCH = 3
 
 LEARNING_RATE = 2e-5
 
-LEARN_ADDRESS_FILE = str(ROOT_DIR / "data" / "address" / "학습주소.txt")
+LEARN_ADDRESS_FILE = str(ROOT_DIR / "data" / "address" / "임베딩데이터(읍면리포함).txt")
 
 DB_HOST = "localhost"
-DB_PORT = 5433
+DB_PORT = 5432
 DB_NAME = "address"
 DB_USER = "postgres"
 DB_PASSWORD = "postgres"
