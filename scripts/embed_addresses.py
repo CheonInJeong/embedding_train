@@ -12,8 +12,8 @@ from src import config
 BATCH_SIZE = 64
 
 MODELS = [
-    {"name": "bge-m3-korean", "path": config.MODEL_NAME, "table": "train_korean"},
-    {"name": "bge-m3-address", "path": config.OUTPUT_DIR, "table": "train_address"},
+    {"name": "bge-m3-korean", "path": config.MODEL_NAME, "table": "train_korean_20260720"},
+    # {"name": "bge-m3-address", "path": config.OUTPUT_DIR, "table": "train_address"},
 ]
 
 
@@ -30,18 +30,18 @@ def load_addresses(path):
         return [line.strip() for line in f if line.strip()]
 
 
-@torch.no_grad()
+@torch.no_grad() #추론임으로 gradient 계산 X
 def embed_batch(tokenizer, model, device, texts):
     encoded = tokenizer(
         texts, padding=True, truncation=True, max_length=512, return_tensors="pt"
     ).to(device)
 
     output = model(**encoded)
-    token_embeddings = output.last_hidden_state
-    mask = encoded["attention_mask"].unsqueeze(-1).float()
-    summed = (token_embeddings * mask).sum(dim=1)
+    token_embeddings = output.last_hidden_state #(batch, seq_len, hidden_size) batch개의 문장. seq_len 토큰의 수, 토큰마다 hidden_size개의 숫자 (예 : 1024)
+    mask = encoded["attention_mask"].unsqueeze(-1).float() #attention_mask의 shape은 (1,8) -> 마지막에 차원 하나 추가  [[1,1,1,1,1,1,0,0]] -> [[[1],[1],[1],[1],[1],[1],[0],[0]]]
+    summed = (token_embeddings * mask).sum(dim=1)#토큰 기준으로 더함
     counts = mask.sum(dim=1).clamp(min=1e-9)
-    embeddings = summed / counts
+    embeddings = summed / counts #mean pooling 여러개의 토큰의 평균을 내서 문장 하나 =  벡터 하나로 만드는 과정 (n, 1024) -> n개의 문장 ,문장마다 1024개의 숫자
     embeddings = F.normalize(embeddings, p=2, dim=1)
     return embeddings.cpu().numpy()
 

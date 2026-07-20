@@ -5,3 +5,8 @@ __pycache__/
 
 # Trained model weights (large binaries, not committed)
 models/bge-m3-address/
+models/bge-m3-korean/
+
+# IDE / logs
+.idea/
+*.log
