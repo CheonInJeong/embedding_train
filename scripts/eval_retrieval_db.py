@@ -14,15 +14,14 @@ from transformers import AutoModel, AutoTokenizer
 from src import config
 from scripts.embed_addresses import embed_batch, get_device
 
-QUERY_FILE = "data/STT발화"
-ANSWER_FILE = "data/STT발화_정답"
+ANCHOR_FILE = "../data/address/STT발화_정답_학습데이터.txt"
 
 BATCH_SIZE = 64
 TOPKS = (1, 5, 10)
 
 MODELS = [
-    {"name": "bge-m3-korean", "path": config.MODEL_NAME, "table": "train_korean"},
-    {"name": "bge-m3-address", "path": config.OUTPUT_DIR, "table": "train_address"},
+    {"name": "bge-m3-korean", "path": config.MODEL_NAME, "table": "train_korean_20260720"},
+    {"name": "bge-m3-address", "path": config.OUTPUT_DIR, "table": "train_address_20260720"},
 ]
 
 
@@ -39,11 +38,16 @@ def get_connection():
 
 
 def load_pairs():
-    with open(QUERY_FILE, encoding="utf-8") as f:
-        queries = [l.strip() for l in f if l.strip()]
-    with open(ANSWER_FILE, encoding="utf-8") as f:
-        answers = [l.strip() for l in f if l.strip()]
-    assert len(queries) == len(answers)
+    queries = []
+    answers = []
+    with open(ANCHOR_FILE, encoding="utf-8") as f:
+        for line in f:
+            line = line.rstrip("\n")
+            if not line.strip():
+                continue
+            q, a = line.split("\t")
+            queries.append(q)
+            answers.append(a)
     return queries, answers
 
 
@@ -149,7 +153,7 @@ def evaluate(model_conf, queries, answers, device):
         else:
             print(f"  {k}: {v}")
 
-    out_csv = f"data/eval_db_{name}.csv"
+    out_csv = f"../data/eval_db_{name}.csv"
     with open(out_csv, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         writer.writeheader()

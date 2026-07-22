@@ -1,0 +1,7 @@
+transformers
+sentence-transformers
+datasets
+huggingface_hub
+accelerate>=1.1.0
+psycopg2-binary
+pgvector

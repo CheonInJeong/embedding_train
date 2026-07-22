@@ -1,0 +1,23 @@
+# GPU 서버 전용 compose 파일. `docker-compose.yml`(로컬 postgres/torchserve)과는 별개로,
+# GPU가 있는 학습 서버에서만 사용한다.
+#
+#   docker compose -f docker-compose.train.yml run --rm train
+#   docker compose -f docker-compose.train.yml run --rm train python -m scripts.push_to_hub
+#
+services:
+  train:
+    image: ${TRAIN_IMAGE:-bge-finetuning-train:latest}
+    build:
+      context: .
+      dockerfile: train/Dockerfile
+    gpus: all
+    environment:
+      HF_TOKEN: ${HF_TOKEN:-}
+      HF_REPO_ID: ${HF_REPO_ID:-}
+    volumes:
+      - ./data:/workspace/data
+      - ./models:/workspace/models
+      - hf_cache:/workspace/.cache/huggingface
+
+volumes:
+  hf_cache:

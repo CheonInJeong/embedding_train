@@ -1,0 +1,16 @@
+# train/Dockerfile 전용 ignore 파일 (BuildKit).
+# `docker build -f train/Dockerfile .` 로 빌드할 때만 적용되고,
+# serve/Dockerfile 빌드에는 영향을 주지 않는다.
+.venv/
+.git/
+**/__pycache__/
+*.pyc
+models/
+output/
+data/
+db/
+docs/
+serve/
+*.md
+.idea/
+tmp.txt

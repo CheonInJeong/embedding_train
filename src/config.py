@@ -12,6 +12,9 @@ ANCHOR_FILE = str(ROOT_DIR / "data" / "address" / "STT주소_anchor.txt")
 TRAIN_FAIL = str(ROOT_DIR / "data" / "train" / "fail.txt")
 TRAIN_ANSWER = str(ROOT_DIR / "data" / "train" / "answer.txt")
 
+# scripts/build_hard_negatives.py가 만든 (발화, 정답주소, 번지수 근접 오답) triplet 데이터
+TRAIN_HARD_NEG = str(ROOT_DIR / "data" / "address" / "STT발화_정답_hard_neg.txt")
+
 VALID_FAIL = str(ROOT_DIR / "data" / "valid" / "fail.txt")
 VALID_ANSWER = str(ROOT_DIR / "data" / "valid" / "answer.txt")
 

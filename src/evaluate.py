@@ -5,8 +5,8 @@ import torch
 # 설정
 # ===========================
 
-MODEL_BEFORE = "../models/bge-m3"
-MODEL_AFTER = "../output/bge-m3-address"
+MODEL_BEFORE = "../models/bge-m3-korean"
+MODEL_AFTER = "../models/bge-m3-address"
 
 ADDRESS_PATH = "../data/부산.txt"
 VALID_PATH = "../data/valid.tsv"

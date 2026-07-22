@@ -13,7 +13,7 @@ BATCH_SIZE = 64
 
 MODELS = [
     {"name": "bge-m3-korean", "path": config.MODEL_NAME, "table": "train_korean_20260720"},
-    # {"name": "bge-m3-address", "path": config.OUTPUT_DIR, "table": "train_address"},
+    {"name": "bge-m3-address", "path": config.OUTPUT_DIR, "table": "train_address_20260720"},
 ]
 
 
